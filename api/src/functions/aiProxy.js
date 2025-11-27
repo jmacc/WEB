@@ -30,8 +30,9 @@ app.http('aiProxy', {
             // Headers for the upstream Azure AI service
             const headers = {
                 'Content-Type': 'application/json',
-                'Ocp-Apim-Subscription-Key': apiKey,
-                'api-key': apiKey
+                'Ocp-Apim-Subscription-Key': apiKey, // Cognitive Services
+                'api-key': apiKey, // Azure OpenAI
+                'Authorization': `Bearer ${apiKey}` // Azure Machine Learning
             };
 
             // Use native fetch (Node 18+)
