@@ -1,4 +1,5 @@
 const { app } = require('@azure/functions');
+const fetch = require('node-fetch');
 
 app.http('aiProxy', {
     methods: ['POST'],
