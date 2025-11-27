@@ -51,6 +51,3 @@ This project is ready to be deployed to Azure Static Web Apps.
     - Click **Review + create** -> **Create**.
 
 3.  **Done!**: Azure will automatically build and deploy your app. You will get a public URL.
-
-## Usage Note
-Since this is a client-side application, your API Key is sent from the browser. This is acceptable for learning and prototypes, but for production apps, consider using an Azure Function as a proxy to hide your keys.
