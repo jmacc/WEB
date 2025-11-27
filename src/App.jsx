@@ -38,10 +38,13 @@ function App() {
     <div className="container">
       <h1>
         <Activity className="inline-icon" size={40} style={{ marginRight: '10px', verticalAlign: 'middle' }} />
-        Azure AI Consumer
+        Azure AI Consumer ML ENDPOINT
       </h1>
       <p style={{ color: '#94a3b8', marginBottom: '2rem' }}>
-        Test your Azure AI endpoints directly from the browser.
+        Test your Azure EnpointML directly from the browser.
+      </p>
+      <p style={{ color: '#94a3b8', marginBottom: '2rem' }}>
+        Elaborado: Jorge Castillo
       </p>
 
       <div className="card">
