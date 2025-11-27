@@ -11,19 +11,20 @@ export const callAzureAI = async (endpoint, apiKey, payload) => {
         throw new Error("Endpoint and API Key are required.");
     }
 
-    const headers = {
-        'Content-Type': 'application/json',
-        // Common header for Azure Cognitive Services
-        'Ocp-Apim-Subscription-Key': apiKey,
-        // Common header for Azure OpenAI (fallback/alternative)
-        'api-key': apiKey
-    };
-
     try {
-        const response = await fetch(endpoint, {
+        // We now call our own backend API (Azure Function)
+        // This avoids CORS issues because the browser calls the same origin,
+        // and the server-side function calls the external Azure AI service.
+        const response = await fetch('/api/aiProxy', {
             method: 'POST',
-            headers: headers,
-            body: JSON.stringify(payload)
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                endpoint,
+                apiKey,
+                payload
+            })
         });
 
         if (!response.ok) {
