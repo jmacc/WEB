@@ -1,13 +1,15 @@
 {
     "name": "api",
     "version": "1.0.0",
-    "description": "Azure Static Web Apps API",
-    "main": "src/functions/*.js",
-    "engines": {
-        "node": ">=18"
-    },
-    "dependencies": {
-        "@azure/functions": "^4.0.0",
-        "node-fetch": "^2.6.7"
+    {
+        "name": "api",
+        "version": "1.0.0",
+        "description": "Azure Static Web Apps API",
+        "main": "src/functions/*.js",
+        "engines": {
+            "node": ">=18"
+        },
+        "dependencies": {
+            "@azure/functions": "^4.0.0"
+        }
     }
-}

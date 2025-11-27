@@ -1,5 +1,4 @@
 const { app } = require('@azure/functions');
-const fetch = require('node-fetch');
 
 app.http('aiProxy', {
     methods: ['POST'],
@@ -8,7 +7,17 @@ app.http('aiProxy', {
         context.log(`Http function processed a request.`);
 
         try {
-            const body = await request.json();
+            // robustly handle body parsing
+            let body;
+            try {
+                body = await request.json();
+            } catch (parseError) {
+                return {
+                    status: 400,
+                    body: JSON.stringify({ error: "Invalid JSON body", details: parseError.message })
+                };
+            }
+
             const { endpoint, apiKey, payload } = body;
 
             if (!endpoint || !apiKey || !payload) {
@@ -25,13 +34,21 @@ app.http('aiProxy', {
                 'api-key': apiKey
             };
 
+            // Use native fetch (Node 18+)
             const response = await fetch(endpoint, {
                 method: 'POST',
                 headers: headers,
                 body: JSON.stringify(payload)
             });
 
-            const responseData = await response.json();
+            // Handle non-JSON responses from upstream
+            let responseData;
+            const contentType = response.headers.get("content-type");
+            if (contentType && contentType.includes("application/json")) {
+                responseData = await response.json();
+            } else {
+                responseData = { text: await response.text() };
+            }
 
             if (!response.ok) {
                 return {
@@ -54,7 +71,8 @@ app.http('aiProxy', {
                 status: 500,
                 body: JSON.stringify({
                     error: "Internal Server Error",
-                    message: error.message
+                    message: error.message,
+                    stack: error.stack
                 })
             };
         }
