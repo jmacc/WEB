@@ -21,21 +21,8 @@ const azureAiProxyPlugin = () => {
           try {
             const { endpoint, apiKey, payload } = JSON.parse(body);
             console.log(`[Proxy] Requesting: ${endpoint}`);
-
-            if (!endpoint || !apiKey || !payload) {
-              console.error("[Proxy] Missing required fields");
-              res.statusCode = 400;
-              res.end(JSON.stringify({ error: "Missing endpoint, apiKey, or payload" }));
-              return;
-            }
-
-            const headers = {
-              'Content-Type': 'application/json',
-              'Ocp-Apim-Subscription-Key': apiKey,
-              'api-key': apiKey,
-              'Authorization': `Bearer ${apiKey}`,
-              'Prediction-Key': apiKey
-            };
+            console.log(`[Proxy] Headers:`, JSON.stringify(headers, null, 2));
+            console.log(`[Proxy] Payload:`, JSON.stringify(payload, null, 2));
 
             const response = await fetch(endpoint, {
               method: 'POST',
@@ -45,6 +32,7 @@ const azureAiProxyPlugin = () => {
 
             const responseText = await response.text();
             console.log(`[Proxy] Upstream Status: ${response.status}`);
+            console.log(`[Proxy] Upstream Body: ${responseText}`);
 
             if (!response.ok) {
               console.error(`[Proxy] Upstream Error Body: ${responseText}`);
