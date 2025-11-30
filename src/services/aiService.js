@@ -38,3 +38,23 @@ export const callAzureAI = async (endpoint, apiKey, payload) => {
         throw error;
     }
 };
+
+/**
+ * Service to handle Azure Custom Vision API calls (URL based).
+ * 
+ * @param {string} endpoint - The full URL of the Azure Custom Vision Prediction endpoint.
+ * @param {string} apiKey - The Prediction-Key.
+ * @param {string} imageUrl - The URL of the image to predict.
+ * @returns {Promise<any>} - The JSON response from the API.
+ */
+export const callAzureVision = async (endpoint, apiKey, imageUrl) => {
+    if (!endpoint || !apiKey || !imageUrl) {
+        throw new Error("Endpoint, API Key, and Image URL are required.");
+    }
+
+    // Custom Vision usually expects a body like { "Url": "http://..." }
+    const payload = { "Url": imageUrl };
+
+    // Reuse the existing generic AI proxy
+    return await callAzureAI(endpoint, apiKey, payload);
+};
