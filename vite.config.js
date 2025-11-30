@@ -20,8 +20,10 @@ const azureAiProxyPlugin = () => {
         req.on('end', async () => {
           try {
             const { endpoint, apiKey, payload } = JSON.parse(body);
+            console.log(`[Proxy] Requesting: ${endpoint}`);
 
             if (!endpoint || !apiKey || !payload) {
+              console.error("[Proxy] Missing required fields");
               res.statusCode = 400;
               res.end(JSON.stringify({ error: "Missing endpoint, apiKey, or payload" }));
               return;
@@ -40,14 +42,19 @@ const azureAiProxyPlugin = () => {
               body: JSON.stringify(payload)
             });
 
-            const responseData = await response.text();
+            const responseText = await response.text();
+            console.log(`[Proxy] Upstream Status: ${response.status}`);
+
+            if (!response.ok) {
+              console.error(`[Proxy] Upstream Error Body: ${responseText}`);
+            }
 
             res.statusCode = response.status;
             res.setHeader('Content-Type', 'application/json');
-            res.end(responseData);
+            res.end(responseText);
 
           } catch (error) {
-            console.error("Proxy Error:", error);
+            console.error("[Proxy] Internal Error:", error);
             res.statusCode = 500;
             res.end(JSON.stringify({ error: "Internal Proxy Error", details: error.message }));
           }

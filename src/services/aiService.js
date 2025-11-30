@@ -29,7 +29,17 @@ export const callAzureAI = async (endpoint, apiKey, payload) => {
 
         if (!response.ok) {
             const errorText = await response.text();
-            throw new Error(`Error ${response.status}: ${response.statusText} - ${errorText}`);
+            let errorMessage = errorText;
+            try {
+                const errorJson = JSON.parse(errorText);
+                errorMessage = errorJson.error || errorJson.message || JSON.stringify(errorJson);
+                if (errorJson.details) {
+                    errorMessage += ` - ${errorJson.details}`;
+                }
+            } catch (e) {
+                // Not JSON, use text
+            }
+            throw new Error(`Error ${response.status}: ${errorMessage}`);
         }
 
         return await response.json();
