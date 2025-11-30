@@ -33,7 +33,8 @@ const azureAiProxyPlugin = () => {
               'Content-Type': 'application/json',
               'Ocp-Apim-Subscription-Key': apiKey,
               'api-key': apiKey,
-              'Authorization': `Bearer ${apiKey}`
+              'Authorization': `Bearer ${apiKey}`,
+              'Prediction-Key': apiKey
             };
 
             const response = await fetch(endpoint, {

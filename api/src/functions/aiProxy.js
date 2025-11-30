@@ -32,7 +32,8 @@ app.http('aiProxy', {
                 'Content-Type': 'application/json',
                 'Ocp-Apim-Subscription-Key': apiKey, // Cognitive Services
                 'api-key': apiKey, // Azure OpenAI
-                'Authorization': `Bearer ${apiKey}` // Azure Machine Learning
+                'Authorization': `Bearer ${apiKey}`, // Azure Machine Learning
+                'Prediction-Key': apiKey // Azure Custom Vision
             };
 
             // Use native fetch (Node 18+)
